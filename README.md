@@ -17,3 +17,10 @@ students through my volunteering opportunities. During those times, I have alway
 track of all the grades for assignments and tests that are assigned throughout the year of their 100+ students. I 
 realized that organizational tools such as a gradebook application would be an essential teaching tool. In hopes of 
 using such application in the future as a teacher, I decided to create my own. 
+
+## User Stories
+- As a user, I want to be able to add a student to a class
+- As a user, I want to be able to create a new test or an assignment
+- As a user, I want to be able to select a student from a class and add their grades to the corresponding tests or 
+assignments
+- As a user, I want to be able to select a student and view all the grades of that student 
