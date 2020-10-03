@@ -1,5 +1,5 @@
 package model;
 
-public class ClassList {
+public class RestaurantList {
     // delete or rename this class!
 }

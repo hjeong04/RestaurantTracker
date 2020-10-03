@@ -18,7 +18,7 @@ only that, but it will also keep a record of restaurants visited with a rating t
 
 ## User Stories
 - As a user, I want to be able to add a restaurant to my collection
-- As a user, I want to be able to delete a restaurant from the collection
+- As a user, I want to be able to remove a restaurant from the collection
 - As a user, I want to be able to mark off a restaurant as visited and rate it 
 - As a user, I want to be able to view all the restaurant names in the collection
 - As a user, I want to be able to select a restaurant in the collection and view its details 

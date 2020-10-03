@@ -2,6 +2,6 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClassListTest {
+class RestaurantListTest {
     // delete or rename this class!
 }
