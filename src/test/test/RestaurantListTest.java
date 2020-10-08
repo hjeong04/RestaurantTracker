@@ -48,40 +48,24 @@ class RestaurantListTest {
     }
 
     @Test
-    public void testNameInList(){
+    public void testSearchByNameNone(){
+        assertEquals(0, rList.searchByName("Restaurant1").size());
+    }
+
+    @Test
+    public void testSearchByNameMultiple(){
         Restaurant r1 = new Restaurant("Restaurant1", "Chinese", "UBC");
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
-        Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
+        Restaurant r3 = new Restaurant("Restaurant3", "Chinese", "Richmond");
 
         rList.addRestaurant(r1);
         rList.addRestaurant(r2);
         rList.addRestaurant(r3);
 
-        assertTrue(rList.nameInList("Restaurant1"));
-        assertTrue(rList.nameInList("Restaurant3"));
-        assertFalse(rList.nameInList("Restaurant5"));
+        assertEquals(1, rList.searchByName("Restaurant1").size());
     }
-
     @Test
-    public void testSearchByName(){
-        Restaurant r1 = new Restaurant("Restaurant1", "Chinese", "UBC");
-        Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
-        Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
-
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
-
-        Restaurant searched = rList.searchByName("Restaurant3");
-        String sType = searched.getType();
-        String sLocation = searched.getLocation();
-
-        assertTrue(r3.getType().equals(sType));
-        assertTrue(r3.getLocation().equals(sLocation));
-    }
-
-    @Test
-    public void testSearchTypeNone(){
+    public void testSearchByTypeNone(){
         assertEquals(0, rList.searchByType("Chinese").size());
     }
 
@@ -99,7 +83,7 @@ class RestaurantListTest {
     }
 
     @Test
-    public void testSearchLocationNone(){
+    public void testSearchByLocationNone(){
         assertEquals(0, rList.searchByLocation("UBC").size());
     }
 

@@ -9,7 +9,7 @@ public class RestaurantList {
 
     // EFFECTS: creates an empty list of restaurant
     public RestaurantList() {
-        listr = new ArrayList<Restaurant>();
+        listr = new ArrayList<>();
     }
 
     // MODIFIES: this
@@ -32,46 +32,47 @@ public class RestaurantList {
     }
 
     // REQUIRES: the list is not empty
-    // EFFECTS: returns true if the restaurant with the given name is in the list, false otherwise
-    public boolean nameInList(String name) {
-        for (Restaurant r : listr) {
-            if (r.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given name
-    public Restaurant searchByName(String name) {
-        List<Restaurant> list = new ArrayList<Restaurant>();
+    public List<Restaurant> searchByName(String name) {
+        List<Restaurant> list = new ArrayList<>();
+
         for (Restaurant r : listr) {
             if (r.getName().equals(name)) {
-                return r;
+                list.add(r);
             }
         }
-
+        return list;
     }
 
     // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given type
     public List<Restaurant> searchByType(String type) {
-        // stub;
-        return listr;
+        List<Restaurant> list = new ArrayList<>();
+
+        for (Restaurant r : listr) {
+            if (r.getType().equals(type)) {
+                list.add(r);
+            }
+        }
+        return list;
     }
 
     // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given location
     public List<Restaurant> searchByLocation(String location) {
-        // stub;
-        return listr;
+        List<Restaurant> list = new ArrayList<>();
+
+        for (Restaurant r : listr) {
+            if (r.getLocation().equals(location)) {
+                list.add(r);
+            }
+        }
+        return list;
     }
 
     // EFFECTS: returns the number of restaurants in the list
     public int getSize() {
-        // stub;
-        return 0;
+        return listr.size();
     }
 
 }
