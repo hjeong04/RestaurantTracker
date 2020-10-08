@@ -40,11 +40,11 @@ class RestaurantListTest {
 
         rList.addRestaurant(r1);
         rList.addRestaurant(r2);
+        rList.addRestaurant(r3);
 
-        assertTrue(rList.removeRestaurant(r2));
+        rList.removeRestaurant(r2);
+        rList.removeRestaurant(r3);
         assertEquals(1, rList.getSize());
-
-        assertFalse(rList.removeRestaurant(r3));
     }
 
     @Test
@@ -62,7 +62,7 @@ class RestaurantListTest {
         rList.addRestaurant(r2);
         rList.addRestaurant(r3);
 
-        assertEquals(1, rList.searchByName("Restaurant1").size());
+        assertEquals(1, rList.searchByName("restaurant1").size());
     }
     @Test
     public void testSearchByTypeNone(){
@@ -79,7 +79,7 @@ class RestaurantListTest {
         rList.addRestaurant(r2);
         rList.addRestaurant(r3);
 
-        assertEquals(2, rList.searchByType("Chinese").size());
+        assertEquals(2, rList.searchByType("chinese").size());
     }
 
     @Test
@@ -99,7 +99,7 @@ class RestaurantListTest {
         rList.addRestaurant(r3);
         rList.addRestaurant(r4);
 
-        assertEquals(3, rList.searchByLocation("UBC").size());
+        assertEquals(3, rList.searchByLocation("ubc").size());
     }
 
     @Test

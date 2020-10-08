@@ -12,32 +12,33 @@ public class RestaurantList {
         listr = new ArrayList<>();
     }
 
+    // getter
+    // EFFECTS: returns the restaurant list
+    public List<Restaurant> viewRestaurantList() {
+        return listr;
+    }
+
     // MODIFIES: this
     // EFFECTS: adds the restaurant to the list
     public void addRestaurant(Restaurant r) {
         listr.add(r);
     }
 
-    // MODIFIES: this
-    // EFFECTS: if the given restaurant is found in the list, remove it and return true
-    //          otherwise return false
-    public boolean removeRestaurant(Restaurant r) {
-        for (Restaurant r1 : listr) {
-            if (r1.equals(r)) {
-                listr.remove(r);
-                return true;
-            }
-        }
-        return false;
+    // REQUIRES: the restaurant given is in the list
+    // EFFECTS: remove the given restaurant from the list
+    public void removeRestaurant(Restaurant r) {
+        listr.remove(r);
     }
 
     // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given name
     public List<Restaurant> searchByName(String name) {
+        String lowercase = name.toLowerCase();
         List<Restaurant> list = new ArrayList<>();
 
         for (Restaurant r : listr) {
-            if (r.getName().equals(name)) {
+            String toLowercase = r.getName().toLowerCase();
+            if (toLowercase.equals(lowercase)) {
                 list.add(r);
             }
         }
@@ -47,10 +48,12 @@ public class RestaurantList {
     // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given type
     public List<Restaurant> searchByType(String type) {
+        String lowercase = type.toLowerCase();
         List<Restaurant> list = new ArrayList<>();
 
         for (Restaurant r : listr) {
-            if (r.getType().equals(type)) {
+            String toLowercase = r.getType().toLowerCase();
+            if (toLowercase.equals(lowercase)) {
                 list.add(r);
             }
         }
@@ -60,10 +63,12 @@ public class RestaurantList {
     // REQUIRES: the list is not empty
     // EFFECTS: returns the list of restaurants with the given location
     public List<Restaurant> searchByLocation(String location) {
+        String lowercase = location.toLowerCase();
         List<Restaurant> list = new ArrayList<>();
 
         for (Restaurant r : listr) {
-            if (r.getLocation().equals(location)) {
+            String toLowercase = r.getLocation().toLowerCase();
+            if (toLowercase.equals(lowercase)) {
                 list.add(r);
             }
         }
