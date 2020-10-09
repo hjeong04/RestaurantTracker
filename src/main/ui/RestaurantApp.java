@@ -19,7 +19,7 @@ public class RestaurantApp {
     // EFFECTS: processes user input
     private void runRestaurantList() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         init();
 
@@ -159,6 +159,7 @@ public class RestaurantApp {
             System.out.println("The name of the restaurant was not found in the list.");
         }
         for (Restaurant r : listByName) {
+            printInfo(r);
             System.out.println("Is this the restaurant you are looking for? Type t (true) or f (false).");
             String b = input.next();
             b = b.toLowerCase();
@@ -167,7 +168,7 @@ public class RestaurantApp {
                 r.visited();
                 System.out.println("Please provide a rating for this restaurant out of 10.");
                 String rating = input.next();
-                int i = Integer.valueOf(rating);
+                int i = Integer.parseInt(rating);
                 r.setRating(i);
                 break;
             }
@@ -182,9 +183,10 @@ public class RestaurantApp {
 
         if (listByName.isEmpty()) {
             System.out.println("The name of the restaurant was not found in the list.");
-        }
-        for (Restaurant r : listByName) {
-            printInfo(r);
+        } else {
+            for (Restaurant r : listByName) {
+                printInfo(r);
+            }
         }
     }
 
@@ -196,9 +198,10 @@ public class RestaurantApp {
 
         if (listByType.isEmpty()) {
             System.out.println("The type of the restaurant was not found in the list.");
-        }
-        for (Restaurant r : listByType) {
-            printInfo(r);
+        } else {
+            for (Restaurant r : listByType) {
+                printInfo(r);
+            }
         }
     }
 
@@ -210,20 +213,21 @@ public class RestaurantApp {
 
         if (listByLocation.isEmpty()) {
             System.out.println("The restaurant with the given location is not found in the list.");
-        }
-        for (Restaurant r : listByLocation) {
-            printInfo(r);
+        } else {
+            for (Restaurant r : listByLocation) {
+                printInfo(r);
+            }
         }
     }
 
     // EFFECTS: prints out the information of the given restaurant
     private void printInfo(Restaurant r) {
         if (!(r.hasVisited())) {
-            System.out.println("Name: " + r.getName() + " : \nType: " + r.getType() + "\nLocation: "
+            System.out.println("\nName: " + r.getName() + "\nType: " + r.getType() + "\nLocation: "
                     + r.getLocation() + "\nVisited?: Not yet!");
+        } else {
+            System.out.println("\nName: " + r.getName() + "\nType: " + r.getType() + "\nLocation: "
+                    + r.getLocation() + "\nVisited?: Yes! \nRating: " + r.getRating());
         }
-        System.out.println("Name: " + r.getName() + " : \nType: " + r.getType() + "\nLocation: "
-                + r.getLocation() + "\nVisited?: Yes! \nRating: " + r.getRating());
     }
-
 }
