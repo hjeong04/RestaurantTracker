@@ -18,6 +18,20 @@ class RestaurantListTest {
     }
 
     @Test
+    public void testViewRestaurantList(){
+        Restaurant r1 = new Restaurant("Restaurant1", "Chinese", "UBC");
+        Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
+        Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
+
+        rList.addRestaurant(r1);
+        rList.addRestaurant(r2);
+        rList.addRestaurant(r3);
+
+        List<Restaurant> rList1 = rList.viewRestaurantList();
+        assertEquals(3, rList1.size());
+    }
+
+    @Test
     public void testAddRestaurantList(){
         assertEquals(0, rList.getSize());
 
