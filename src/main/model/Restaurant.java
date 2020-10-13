@@ -1,5 +1,6 @@
 package model;
 
+// Represents a restaurant with a name, type, location, a rating (out of 10) and whether visited or not
 public class Restaurant {
 
     private String name;

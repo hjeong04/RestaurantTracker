@@ -6,6 +6,7 @@ import model.RestaurantList;
 import java.util.List;
 import java.util.Scanner;
 
+// a restaurant list application
 public class RestaurantApp {
     private RestaurantList rl1;
     private Scanner input;

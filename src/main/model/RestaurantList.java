@@ -1,9 +1,9 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+// represents a list of restaurant
 public class RestaurantList {
 
     private List<Restaurant> listr;
@@ -13,7 +13,6 @@ public class RestaurantList {
         listr = new ArrayList<>();
     }
 
-    // getter
     // EFFECTS: returns the restaurant list
     public List<Restaurant> viewRestaurantList() {
         return listr;
