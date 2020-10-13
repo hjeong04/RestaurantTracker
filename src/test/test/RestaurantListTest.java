@@ -9,12 +9,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// test for restaurant list class
 class RestaurantListTest {
-    private RestaurantList rList;
+    private RestaurantList rlist;
 
     @BeforeEach
     public void testConstructors() {
-        rList = new RestaurantList();
+        rlist = new RestaurantList();
     }
 
     @Test
@@ -23,27 +24,27 @@ class RestaurantListTest {
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        List<Restaurant> rList1 = rList.viewRestaurantList();
+        List<Restaurant> rList1 = rlist.viewRestaurantList();
         assertEquals(3, rList1.size());
     }
 
     @Test
     public void testAddRestaurantList(){
-        assertEquals(0, rList.getSize());
+        assertEquals(0, rlist.getSize());
 
         Restaurant r1 = new Restaurant("Restaurant1", "Chinese", "UBC");
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        assertEquals(3, rList.getSize());
+        assertEquals(3, rlist.getSize());
     }
 
     @Test
@@ -52,18 +53,18 @@ class RestaurantListTest {
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        rList.removeRestaurant(r2);
-        rList.removeRestaurant(r3);
-        assertEquals(1, rList.getSize());
+        rlist.removeRestaurant(r2);
+        rlist.removeRestaurant(r3);
+        assertEquals(1, rlist.getSize());
     }
 
     @Test
     public void testSearchByNameNone(){
-        assertEquals(0, rList.searchByName("Restaurant1").size());
+        assertEquals(0, rlist.searchByName("Restaurant1").size());
     }
 
     @Test
@@ -72,15 +73,15 @@ class RestaurantListTest {
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Chinese", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        assertEquals(1, rList.searchByName("restaurant1").size());
+        assertEquals(1, rlist.searchByName("restaurant1").size());
     }
     @Test
     public void testSearchByTypeNone(){
-        assertEquals(0, rList.searchByType("Chinese").size());
+        assertEquals(0, rlist.searchByType("Chinese").size());
     }
 
     @Test
@@ -89,16 +90,16 @@ class RestaurantListTest {
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Chinese", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        assertEquals(2, rList.searchByType("chinese").size());
+        assertEquals(2, rlist.searchByType("chinese").size());
     }
 
     @Test
     public void testSearchByLocationNone(){
-        assertEquals(0, rList.searchByLocation("UBC").size());
+        assertEquals(0, rlist.searchByLocation("UBC").size());
     }
 
     @Test
@@ -108,27 +109,27 @@ class RestaurantListTest {
         Restaurant r3 = new Restaurant("Restaurant3", "Bubble Tea", "Richmond");
         Restaurant r4 = new Restaurant("Restaurant4", "Ice Cream", "UBC");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
-        rList.addRestaurant(r4);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
+        rlist.addRestaurant(r4);
 
-        assertEquals(3, rList.searchByLocation("ubc").size());
+        assertEquals(3, rlist.searchByLocation("ubc").size());
     }
 
     @Test
     public void testGetSize(){
-        assertEquals(0, rList.getSize());
+        assertEquals(0, rlist.getSize());
 
         Restaurant r1 = new Restaurant("Restaurant1", "Chinese", "UBC");
         Restaurant r2 = new Restaurant("Restaurant2", "Italian", "Downtown");
         Restaurant r3 = new Restaurant("Restaurant3", "Chinese", "Richmond");
 
-        rList.addRestaurant(r1);
-        rList.addRestaurant(r2);
-        rList.addRestaurant(r3);
+        rlist.addRestaurant(r1);
+        rlist.addRestaurant(r2);
+        rlist.addRestaurant(r3);
 
-        assertEquals(3, rList.getSize());
+        assertEquals(3, rlist.getSize());
     }
 
 

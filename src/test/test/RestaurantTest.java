@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// test for restaurant class
 public class RestaurantTest {
 
     private Restaurant r1;
@@ -17,9 +18,9 @@ public class RestaurantTest {
 
     @Test
     public void testConstructor(){
-        assertTrue(r1.getName().equals("First Restaurant"));
-        assertTrue(r1.getLocation().equals("Broadway"));
-        assertTrue(r1.getType().equals("Chinese"));
+        assertEquals("First Restaurant", r1.getName());
+        assertEquals("Broadway", r1.getLocation());
+        assertEquals("Chinese", r1.getType());
         assertEquals(0, r1.getRating());
         assertFalse(r1.hasVisited());
     }
