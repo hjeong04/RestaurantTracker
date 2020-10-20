@@ -22,3 +22,5 @@ only that, but it will also keep a record of restaurants visited with a rating t
 - As a user, I want to be able to mark off a restaurant as visited and rate it 
 - As a user, I want to be able to view all the restaurant names in the collection
 - As a user, I want to be able to select a restaurant with the given name, type or location and view its details 
+- As a user, I want to save my restaurant list to file.
+- As a user, I want to be able to load my restaurant list from file. 
