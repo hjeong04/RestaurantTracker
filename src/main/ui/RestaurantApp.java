@@ -23,7 +23,7 @@ public class RestaurantApp {
 
     // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     // EFFECTS: runs the teller application
-    public RestaurantApp() {
+    public RestaurantApp() throws FileNotFoundException {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runRestaurantList();
@@ -54,29 +54,22 @@ public class RestaurantApp {
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
-        switch (command) {
-            case "A":
-                viewRestaurant();
-                break;
-            case "B":
-                addRestaurant();
-                break;
-            case "C":
-                removeRestaurant();
-                break;
-            case "D":
-                searchRestaurant();
-                break;
-            case "E":
-                visitedRestaurant();
-                break;
-            case "F":
-                saveRestaurantList();
-                break;
-            case "G":
-                loadRestaurantList();
-            default:
-                System.out.println("Selection not valid...");
+        if (command.equals("A")) {
+            viewRestaurant();
+        } else if (command.equals("B")) {
+            addRestaurant();
+        } else if (command.equals("C")) {
+            removeRestaurant();
+        } else if (command.equals("D")) {
+            searchRestaurant();
+        } else if (command.equals("E")) {
+            visitedRestaurant();
+        } else if (command.equals("F")) {
+            saveRestaurantList();
+        } else if (command.equals("G")) {
+            loadRestaurantList();
+        } else {
+            System.out.println("Selection not valid...");
         }
     }
 
