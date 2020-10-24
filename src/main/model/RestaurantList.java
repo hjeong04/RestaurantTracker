@@ -1,16 +1,26 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // represents a list of restaurant
-public class RestaurantList {
-
+public class RestaurantList implements Writable {
+    private String name;
     private List<Restaurant> listr;
 
-    // EFFECTS: creates an empty list of restaurant
-    public RestaurantList() {
+    // EFFECTS: creates an empty list of restaurant with a name
+    public RestaurantList(String name) {
+        this.name = name;
         listr = new ArrayList<>();
+    }
+
+    // EFFECTS returns the name
+    public String getName() {
+        return name;
     }
 
     // EFFECTS: returns the restaurant list
@@ -80,5 +90,24 @@ public class RestaurantList {
         return listr.size();
     }
 
+    // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("restaurants", restaurantsToJson());
+        return json;
+    }
+
+    // EFFECTS:returns restaurants in this list as a JSON array
+    private JSONArray restaurantsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Restaurant r : listr) {
+            jsonArray.put(r.toJson());
+        }
+
+        return jsonArray;
+    }
 }
 

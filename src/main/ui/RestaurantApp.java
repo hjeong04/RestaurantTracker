@@ -2,17 +2,30 @@ package ui;
 
 import model.Restaurant;
 import model.RestaurantList;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+// referenced https://github.students.cs.ubc.ca/CPSC210/TellerApp
+
+
 // a restaurant list application
 public class RestaurantApp {
+    private static final String JSON_STORE = "./data/restaurantList.json";
     private RestaurantList rl1;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
+    // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     // EFFECTS: runs the teller application
     public RestaurantApp() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runRestaurantList();
     }
 
@@ -29,7 +42,7 @@ public class RestaurantApp {
             command = input.next();
             command = command.toUpperCase();
 
-            if (command.equals("F")) {
+            if (command.equals("H")) {
                 keepGoing = false;
             } else {
                 processCommand(command);
@@ -57,6 +70,11 @@ public class RestaurantApp {
             case "E":
                 visitedRestaurant();
                 break;
+            case "F":
+                saveRestaurantList();
+                break;
+            case "G":
+                loadRestaurantList();
             default:
                 System.out.println("Selection not valid...");
         }
@@ -65,7 +83,7 @@ public class RestaurantApp {
     // MODIFIES: this
     // EFFECTS: initializes the restaurant list
     private void init() {
-        rl1 = new RestaurantList();
+        rl1 = new RestaurantList("Hannah's list");
         input = new Scanner(System.in);
     }
 
@@ -77,7 +95,9 @@ public class RestaurantApp {
         System.out.println("C: Remove a Restaurant");
         System.out.println("D: Search Restaurants");
         System.out.println("E: Visited a Restaurant");
-        System.out.println("F: Quit");
+        System.out.println("F: Save Restaurant List to File");
+        System.out.println("G: Load Restaurant List from File");
+        System.out.println("H: Quit");
     }
 
     // MODIFIES: this
@@ -96,11 +116,11 @@ public class RestaurantApp {
     private void addRestaurant() {
         System.out.println("Type in the following information.");
         System.out.println("Name of the restaurant: ");
-        String name = input.next();
+        String name = input.nextLine();
         System.out.println("Type of food served at the restaurant: ");
-        String type = input.next();
+        String type = input.nextLine();
         System.out.println("Location of the restaurant: ");
-        String location = input.next();
+        String location = input.nextLine();
 
         Restaurant r = new Restaurant(name, type, location);
         rl1.addRestaurant(r);
@@ -112,7 +132,7 @@ public class RestaurantApp {
     // EFFECTS: conducts removal of restaurant
     private void removeRestaurant() {
         System.out.println("Type in the name of the restaurant you would like to remove.");
-        String name = input.next();
+        String name = input.nextLine();
         List<Restaurant> listWithName = rl1.searchByName(name);
 
         if (listWithName.isEmpty()) {
@@ -132,7 +152,7 @@ public class RestaurantApp {
         System.out.println("N for name");
         System.out.println("T for type");
         System.out.println("L for location");
-        String selection = input.next();
+        String selection = input.nextLine();
         selection = selection.toUpperCase();
 
         if (selection.equals("N")) {
@@ -153,7 +173,7 @@ public class RestaurantApp {
     // EFFECTS: conducts procedure for having visited a restaurant
     private void visitedRestaurant() {
         System.out.println("Type in the name of the restaurant you have visited.");
-        String name = input.next();
+        String name = input.nextLine();
         List<Restaurant> listByName = rl1.searchByName(name);
 
         if (listByName.isEmpty()) {
@@ -162,13 +182,13 @@ public class RestaurantApp {
         for (Restaurant r : listByName) {
             printInfo(r);
             System.out.println("Is this the restaurant you are looking for? Type t (true) or f (false).");
-            String b = input.next();
+            String b = input.nextLine();
             b = b.toLowerCase();
 
             if (b.equals("t")) {
                 r.visited();
                 System.out.println("Please provide a rating for this restaurant out of 10.");
-                String rating = input.next();
+                String rating = input.nextLine();
                 int i = Integer.parseInt(rating);
                 r.setRating(i);
                 break;
@@ -176,10 +196,35 @@ public class RestaurantApp {
         }
     }
 
+    // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    // EFFECTS: saves the restaurant list to file
+    private void saveRestaurantList() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(rl1);
+            jsonWriter.close();
+            System.out.println("Saved " + rl1.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    // MODIFIES: this
+    // EFFECTS: loads restaurant list from file
+    private void loadRestaurantList() {
+        try {
+            rl1 = jsonReader.read();
+            System.out.println("Loaded " + rl1.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
     // EFFECTS: searches the restaurant by name and prints it out
     private void searchByName() {
         System.out.println("Type in the name of the restaurant: ");
-        String name = input.next();
+        String name = input.nextLine();
         List<Restaurant> listByName = rl1.searchByName(name);
 
         if (listByName.isEmpty()) {
@@ -194,7 +239,7 @@ public class RestaurantApp {
     // EFFECTS: searches the restaurant by type and prints it out
     private void searchByType() {
         System.out.println("Type in the type of food served at the restaurant: ");
-        String type = input.next();
+        String type = input.nextLine();
         List<Restaurant> listByType = rl1.searchByType(type);
 
         if (listByType.isEmpty()) {
@@ -209,7 +254,7 @@ public class RestaurantApp {
     //EFFECTS: searches the restaurant by location and prints it out
     private void searchByLocation() {
         System.out.println("Type in the location of the restaurant: ");
-        String location = input.next();
+        String location = input.nextLine();
         List<Restaurant> listByLocation = rl1.searchByLocation(location);
 
         if (listByLocation.isEmpty()) {

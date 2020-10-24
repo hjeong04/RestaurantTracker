@@ -1,4 +1,4 @@
-package test;
+package model;
 
 import model.Restaurant;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +31,16 @@ public class RestaurantTest {
         r1.visited();
         assertTrue(r1.hasVisited());
     }
+
+    @Test
+    public void testNotVisited(){
+        assertFalse(r1.hasVisited());
+        r1.visited();
+        assertTrue(r1.hasVisited());
+        r1.notVisited();
+        assertFalse(r1.hasVisited());
+    }
+
 
     @Test
     public void testSetRating(){

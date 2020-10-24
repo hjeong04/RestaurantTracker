@@ -1,0 +1,19 @@
+{
+  "restaurants": [
+    {
+      "name": "Bufala",
+      "type": "Pizza",
+      "location": "Kerrisdale",
+      "visited?": true,
+      "rating": 8
+    },
+    {
+      "name": "TacoMio",
+      "type": "Mexican",
+      "location": "UBC",
+      "visited?": false,
+      "rating": 0
+    }
+  ],
+  "name": "My restaurant list"
+}

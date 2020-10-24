@@ -1,4 +1,4 @@
-package test;
+package model;
 
 import model.Restaurant;
 import model.RestaurantList;
@@ -15,7 +15,7 @@ class RestaurantListTest {
 
     @BeforeEach
     public void testConstructors() {
-        rlist = new RestaurantList();
+        rlist = new RestaurantList("Hannah's list");
     }
 
     @Test
