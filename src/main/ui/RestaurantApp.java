@@ -107,8 +107,8 @@ public class RestaurantApp {
     // MODIFIES: this
     // EFFECTS: conducts adding of restaurant
     private void addRestaurant() {
-        System.out.println("Type in the following information.");
-        System.out.println("Name of the restaurant: ");
+        System.out.println("Type in the following information. \nName of the restaurant: ");
+        input.nextLine();
         String name = input.nextLine();
         System.out.println("Type of food served at the restaurant: ");
         String type = input.nextLine();
@@ -125,6 +125,7 @@ public class RestaurantApp {
     // EFFECTS: conducts removal of restaurant
     private void removeRestaurant() {
         System.out.println("Type in the name of the restaurant you would like to remove.");
+        input.nextLine();
         String name = input.nextLine();
         List<Restaurant> listWithName = rl1.searchByName(name);
 
@@ -145,6 +146,7 @@ public class RestaurantApp {
         System.out.println("N for name");
         System.out.println("T for type");
         System.out.println("L for location");
+        input.nextLine();
         String selection = input.nextLine();
         selection = selection.toUpperCase();
 
@@ -166,6 +168,7 @@ public class RestaurantApp {
     // EFFECTS: conducts procedure for having visited a restaurant
     private void visitedRestaurant() {
         System.out.println("Type in the name of the restaurant you have visited.");
+        input.nextLine();
         String name = input.nextLine();
         List<Restaurant> listByName = rl1.searchByName(name);
 
@@ -175,13 +178,13 @@ public class RestaurantApp {
         for (Restaurant r : listByName) {
             printInfo(r);
             System.out.println("Is this the restaurant you are looking for? Type t (true) or f (false).");
-            String b = input.nextLine();
+            String b = input.next();
             b = b.toLowerCase();
 
             if (b.equals("t")) {
                 r.visited();
                 System.out.println("Please provide a rating for this restaurant out of 10.");
-                String rating = input.nextLine();
+                String rating = input.next();
                 int i = Integer.parseInt(rating);
                 r.setRating(i);
                 break;
