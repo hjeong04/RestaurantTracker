@@ -1,19 +1,19 @@
 {
-  "restaurants": [
-    {
-      "name": "Bufala",
-      "type": "Pizza",
-      "location": "Kerrisdale",
-      "visited?": true,
-      "rating": 8
-    },
-    {
-      "name": "TacoMio",
-      "type": "Mexican",
-      "location": "UBC",
-      "visited?": false,
-      "rating": 0
-    }
-  ],
-  "name": "My restaurant list"
+    "name": "My restaurant list",
+    "restaurants": [
+        {
+            "visited?": false,
+            "name": "TacoMio",
+            "rating": 0,
+            "location": "UBC",
+            "type": "Mexican"
+        },
+        {
+            "visited?": true,
+            "name": "Bufala",
+            "rating": 8,
+            "location": "Kerrisdale",
+            "type": "Pizza"
+        }
+    ]
 }

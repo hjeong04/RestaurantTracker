@@ -20,7 +20,7 @@ public class JsonWriterTest extends JsonTest {
     void testWriterInvalidFail() {
         try {
             RestaurantList rl = new RestaurantList("My restaurant list");
-            JsonWriter writer = new JsonWriter("./data/noSuchFile.json");
+            JsonWriter writer = new JsonWriter("/");
             writer.open();
             fail("IOException was expected");
         } catch (IOException e) {
@@ -60,15 +60,16 @@ public class JsonWriterTest extends JsonTest {
             writer.write(rl);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/test/WriterGeneralRestaurantList.json");
+            JsonReader reader = new JsonReader("./data/testWriterGeneralRestaurantList.json");
             rl = reader.read();
             assertEquals("My restaurant list", rl.getName());
             List<Restaurant> restaurants = rl.viewRestaurantList();
             assertEquals(2, restaurants.size());
-            checkRestaurant("Bufala", "Pizza", "Kerrisdale", true, 8, restaurants.get(0));
-            checkRestaurant("TacoMio", "Mexican", "UBC", false, 0, restaurants.get(1));
+            checkRestaurant("Bufala", "Pizza", "Kerrisdale", true, 8, restaurants.get(1));
+            checkRestaurant("TacoMio", "Mexican", "UBC", false, 0, restaurants.get(0));
 
         } catch (IOException e) {
+            e.printStackTrace();
             fail("Exception should not have been thrown");
         }
     }

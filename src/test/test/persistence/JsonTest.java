@@ -3,6 +3,7 @@ package test.persistence;
 // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
 import model.Restaurant;
+import model.RestaurantList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -23,7 +23,7 @@ public class RestaurantApp {
 
     // referenced https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     // EFFECTS: runs the teller application
-    public RestaurantApp() throws FileNotFoundException {
+    public RestaurantApp() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runRestaurantList();
