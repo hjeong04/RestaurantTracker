@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 /* ListDemo.java requires no other files. */
 public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private JList list;
-    private DefaultListModel<Restaurant> listModel;
+    private DefaultListModel<String> listModel;
 
     private static final String addString = "Add";
     private static final String removeString = "Remove";
@@ -46,23 +46,18 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
 
-        name = new JTextField(10);
+        name = new JTextField(20);
         name.addActionListener(addListener);
         name.getDocument().addDocumentListener(addListener);
-//        //String name = listModel.getElementAt(
-//                list.getSelectedIndex()).toString();
 
-        type = new JTextField(10);
+        type = new JTextField(20);
         type.addActionListener(addListener);
         type.getDocument().addDocumentListener(addListener);
-//        String type = listModel.getElementAt(
-//                list.getSelectedIndex()).toString();
 
         location = new JTextField(10);
         location.addActionListener(addListener);
         location.getDocument().addDocumentListener(addListener);
-//        String location = listModel.getElementAt(
-//                list.getSelectedIndex()).toString();
+
         constructPanel(listScrollPane, addButton);
 
     }
@@ -76,15 +71,20 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
         buttonPane.add(Box.createHorizontalStrut(5));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel nameLabel = new JLabel("Name");
-        buttonPane.add(nameLabel);
-        buttonPane.add(this.name);
+        panel.add(nameLabel);
+        panel.add(this.name);
         JLabel typeLabel = new JLabel("Type");
-        buttonPane.add(typeLabel);
-        buttonPane.add(this.type);
+        panel.add(typeLabel);
+        panel.add(this.type);
         JLabel locationLabel = new JLabel("Location");
-        buttonPane.add(locationLabel);
-        buttonPane.add(this.location);
+        panel.add(locationLabel);
+        panel.add(this.location);
+
+        buttonPane.add(panel);
         buttonPane.add(addButton);
         buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -128,15 +128,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
 
         //Required by ActionListener.
         public void actionPerformed(ActionEvent e) {
-            String name = RestaurantGUI.this.name.getText();
-
-            //User didn't type in a unique name...
-            if (name.equals("") || alreadyInList(name)) {
-                Toolkit.getDefaultToolkit().beep();
-                RestaurantGUI.this.name.requestFocusInWindow();
-                RestaurantGUI.this.name.selectAll();
-                return;
-            }
 
             int index = list.getSelectedIndex(); //get selected index
             if (index == -1) { //no selection, so insert at beginning
@@ -158,8 +149,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             list.ensureIndexIsVisible(index);
         }
 
-        private Restaurant createRestaurant() {
-            return new Restaurant(name.getText(), type.getText(), location.getText());
+        private String createRestaurant() {
+            return "\nName: " + name.getText() + "\nType: " + type.getText() + "\nLocation: "
+                    + location.getText() + "\nVisited?: Not yet!";
         }
 
         @Override
@@ -179,13 +171,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             }
         }
 
-
-        //This method tests for string equality. You could certainly
-        //get more sophisticated about the algorithm.  For example,
-        //you might want to ignore white space and capitalization.
-        protected boolean alreadyInList(String name) {
-            return listModel.contains(name);
-        }
 
         private void enableButton() {
             if (!alreadyEnabled) {
