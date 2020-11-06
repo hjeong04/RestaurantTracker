@@ -46,6 +46,13 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         removeButton.setActionCommand(removeString);
         removeButton.addActionListener(new RemoveListener());
 
+        initializeJTextFields(addListener);
+
+        constructPanel(listScrollPane, addButton);
+
+    }
+
+    private void initializeJTextFields(AddListener addListener) {
         name = new JTextField(20);
         name.addActionListener(addListener);
         name.getDocument().addDocumentListener(addListener);
@@ -57,9 +64,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         location = new JTextField(10);
         location.addActionListener(addListener);
         location.getDocument().addDocumentListener(addListener);
-
-        constructPanel(listScrollPane, addButton);
-
     }
 
     //Create a panel that uses BoxLayout.
@@ -143,6 +147,10 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             //Reset the text field.
             RestaurantGUI.this.name.requestFocusInWindow();
             RestaurantGUI.this.name.setText("");
+            RestaurantGUI.this.type.requestFocusInWindow();
+            RestaurantGUI.this.type.setText("");
+            RestaurantGUI.this.location.requestFocusInWindow();
+            RestaurantGUI.this.location.setText("");
 
             //Select the new item and make it visible.
             list.setSelectedIndex(index);
