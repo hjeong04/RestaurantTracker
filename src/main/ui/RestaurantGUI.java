@@ -40,10 +40,12 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private JTextField location;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+    private JSplitPane splitpane;
 
     // EFFECTS: establishes the components of the GUI
     public RestaurantGUI(JFrame frame) {
         super(new BorderLayout());
+        restaurantList = new RestaurantList("RestaurantList");
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
         this.frame = frame;
@@ -53,7 +55,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         info = new JTextArea(10,20);
         JScrollPane infoScrollPane = new JScrollPane(info);
         info.setEditable(false);
-        JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, infoScrollPane);
+        splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, infoScrollPane);
 
         initializeAddButton();
         removeButton = new JButton(removeString);
@@ -179,9 +181,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             return;
         }
         for (Restaurant r: restaurantList.viewRestaurantList()) {
-            if (r.equals(restaurantName)) {
-                info = new JTextArea("\nName: " +  name.getText() + "\nType: " + type.getText() + "\nLocation: "
-                        + location.getText() + "\nVisited?: Not yet!");
+            if (r.getName().equals(restaurantName)) {
+                splitpane.setRightComponent(new JTextArea("\nName: " +  r.getName() + "\nType: " + r.getType()
+                        + "\nLocation: " + r.getLocation() + "\nVisited?: Not yet!"));
             }
         }
     }
@@ -212,7 +214,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
                 list.ensureIndexIsVisible(index);
 
             }
-            playSound("button.wav");
+            playSound("data" + File.separator + "button.wav");
         }
     }
 
@@ -251,7 +253,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
 
-            playSound("button1.wav");
+            playSound("data" + File.separator + "button1.wav");
         }
 
         @Override
@@ -278,6 +280,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             }
         }
 
+        // a helper method for removeUpdate function
         private boolean handleEmptyTextField(DocumentEvent e) {
             if (e.getDocument().getLength() <= 0) {
                 button.setEnabled(false);
@@ -295,11 +298,14 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         public void actionPerformed(ActionEvent e) {
             try {
                 restaurantList = jsonReader.read();
+                for (Restaurant r : restaurantList.viewRestaurantList()) {
+                    listModel.insertElementAt(r.getName(), 0);
+                }
                 JOptionPane.showMessageDialog(frame, "Data has been loaded");
             } catch (IOException io) {
                 System.out.println("Unable to read from file: " + JSON_STORE);
             }
-            playSound("button2.wav");
+            playSound("data" + File.separator + "button2.wav");
         }
     }
 
@@ -316,7 +322,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             } catch (IOException io) {
                 System.out.println("Unable to save from file: " + JSON_STORE);
             }
-            playSound("button3.wav");
+            playSound("data" + File.separator + "button3.wav");
         }
     }
 
@@ -329,6 +335,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 
