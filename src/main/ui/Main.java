@@ -11,7 +11,7 @@ public class Main {
         JFrame frame = new JFrame("RestaurantList");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JComponent newContentPane = new RestaurantGUI();
+        JComponent newContentPane = new RestaurantGUI(frame);
         newContentPane.setOpaque(true);
         frame.setContentPane(newContentPane);
 

@@ -1,57 +1,99 @@
 package ui;
 
 import model.Restaurant;
+import model.RestaurantList;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
-/* ListDemo.java requires no other files. */
+// constructs a GUI for the Restaurant App
 public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private JList list;
     private DefaultListModel<String> listModel;
+    private JFrame frame;
 
+    private static final String JSON_STORE = "./data/restaurantList.json";
     private static final String addString = "Add";
     private static final String removeString = "Remove";
+    private static final String loadString = "Load";
+    private static final String saveString = "Save";
+
+    private RestaurantList restaurantList;
+    private JButton addButton;
     private JButton removeButton;
+    private JButton loadButton;
+    private JButton saveButton;
+    private AddListener addListener;
+    private JTextArea info;
     private JTextField name;
     private JTextField type;
     private JTextField location;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public RestaurantGUI() {
+    // EFFECTS: establishes the components of the GUI
+    public RestaurantGUI(JFrame frame) {
         super(new BorderLayout());
-
+        jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        this.frame = frame;
         listModel = new DefaultListModel<>();
 
-        //Create the list and put it in a scroll pane.
+        JScrollPane listScrollPane = constructList();
+        info = new JTextArea(10,20);
+        JScrollPane infoScrollPane = new JScrollPane(info);
+        info.setEditable(false);
+        JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, infoScrollPane);
+
+        initializeAddButton();
+        removeButton = new JButton(removeString);
+        initializeButtons(removeButton, removeString, new RemoveListener());
+        loadButton = new JButton(loadString);
+        initializeButtons(loadButton, loadString, new LoadListener());
+        saveButton = new JButton(saveString);
+        initializeButtons(saveButton, saveString, new SaveListener());
+        initializeJTextFields(addListener);
+        constructPanel(splitpane, addButton);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates the list and put it in a scroll pane.
+    private JScrollPane constructList() {
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
         list.addListSelectionListener(this);
-        list.setVisibleRowCount(5);
-        JScrollPane listScrollPane = new JScrollPane(list);
+        list.setVisibleRowCount(10);
+        return new JScrollPane(list);
+    }
 
-        JButton addButton = new JButton(addString);
-        AddListener addListener = new AddListener(addButton);
+    // MODIFIES: this
+    // EFFECTS: initializes the add button and addlistener
+    private void initializeAddButton() {
+        addButton = new JButton(addString);
+        addListener = new AddListener(addButton);
         addButton.setActionCommand(addString);
         addButton.addActionListener(addListener);
         addButton.setEnabled(false);
-
-        removeButton = new JButton(removeString);
-        removeButton.setActionCommand(removeString);
-        removeButton.addActionListener(new RemoveListener());
-
-        initializeJTextFields(addListener);
-
-        constructPanel(listScrollPane, addButton);
-
     }
 
+    private void initializeButtons(JButton button, String text, ActionListener actionListener) {
+        button.setActionCommand(text);
+        button.addActionListener(actionListener);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: constructs three JTextFields the correspond to name, type, location of restaurant
     private void initializeJTextFields(AddListener addListener) {
         name = new JTextField(20);
         name.addActionListener(addListener);
@@ -66,16 +108,40 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         location.getDocument().addDocumentListener(addListener);
     }
 
-    //Create a panel that uses BoxLayout.
-
-    private void constructPanel(JScrollPane listScrollPane, JButton addButton) {
+    // MODIFIES: this
+    // EFFECTS: constructs panel and adds all the necessary components
+    private void constructPanel(JSplitPane splitPane, JButton addButton) {
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-        buttonPane.add(removeButton);
+
+        JPanel leftButtonPane = constructLeftButtonPane();
+        buttonPane.add(leftButtonPane);
         buttonPane.add(Box.createHorizontalStrut(5));
         buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
         buttonPane.add(Box.createHorizontalStrut(5));
 
+        JPanel panel = constructLabels();
+
+        buttonPane.add(panel);
+        buttonPane.add(addButton);
+        buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        add(splitPane, BorderLayout.CENTER);
+        add(buttonPane, BorderLayout.PAGE_END);
+    }
+
+    // a helper method for construct panel
+    private JPanel constructLeftButtonPane() {
+        JPanel leftButtonPane = new JPanel();
+        leftButtonPane.setLayout(new BoxLayout(leftButtonPane, BoxLayout.PAGE_AXIS));
+        leftButtonPane.add(removeButton);
+        leftButtonPane.add(loadButton);
+        leftButtonPane.add(saveButton);
+        return leftButtonPane;
+    }
+
+    // a helper method for construct panel
+    private JPanel constructLabels() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel nameLabel = new JLabel("Name");
@@ -87,16 +153,43 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         JLabel locationLabel = new JLabel("Location");
         panel.add(locationLabel);
         panel.add(this.location);
-
-        buttonPane.add(panel);
-        buttonPane.add(addButton);
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        add(listScrollPane, BorderLayout.CENTER);
-        add(buttonPane, BorderLayout.PAGE_END);
+        return panel;
     }
 
+    // MODIFIES: this
+    // EFFECTS: determines what happens when objects in the list are selected
+    public void valueChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting() == false) {
+
+            if (list.getSelectedIndex() == -1) {
+                //No selection, disable fire button.
+                removeButton.setEnabled(false);
+
+            } else {
+                //Selection, enable the fire button.
+                removeButton.setEnabled(true);
+                JList list = (JList)e.getSource();
+                updateInfo(listModel.get(list.getSelectedIndex()));
+            }
+        }
+    }
+
+    private void updateInfo(String restaurantName) {
+        if (restaurantList == null) {
+            return;
+        }
+        for (Restaurant r: restaurantList.viewRestaurantList()) {
+            if (r.equals(restaurantName)) {
+                info = new JTextArea("\nName: " +  name.getText() + "\nType: " + type.getText() + "\nLocation: "
+                        + location.getText() + "\nVisited?: Not yet!");
+            }
+        }
+    }
+
+    // removes the restaurant from the list
     class RemoveListener implements ActionListener {
+
+        // EFFECTS: removes the selected element from the list and from the panel
         public void actionPerformed(ActionEvent e) {
             //This method can be called only if
             //there's a valid selection
@@ -106,7 +199,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
 
             int size = listModel.getSize();
 
-            if (size == 0) { //Nobody's left, disable firing.
+            if (size == 0) {
                 removeButton.setEnabled(false);
 
             } else { //Select an index.
@@ -117,11 +210,13 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
 
                 list.setSelectedIndex(index);
                 list.ensureIndexIsVisible(index);
+
             }
+            playSound("button.wav");
         }
     }
 
-    //This listener is shared by the text field and the hire button.
+    //This listener is shared by the text field and the add button.
     class AddListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
         private JButton button;
@@ -130,8 +225,10 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             this.button = button;
         }
 
-        //Required by ActionListener.
+        // EFFECTS: adds the element into the list
         public void actionPerformed(ActionEvent e) {
+            Restaurant restaurant = new Restaurant(name.getText(), type.getText(), location.getText());
+            restaurantList.addRestaurant(restaurant);
 
             int index = list.getSelectedIndex(); //get selected index
             if (index == -1) { //no selection, so insert at beginning
@@ -140,9 +237,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
                 index++;
             }
 
-            listModel.insertElementAt(createRestaurant(), index);
-            //If we just wanted to add to the end, we'd do this:
-            //listModel.addElement(employeeName.getText());
+            listModel.insertElementAt(name.getText(), index);
 
             //Reset the text field.
             RestaurantGUI.this.name.requestFocusInWindow();
@@ -155,11 +250,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             //Select the new item and make it visible.
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
-        }
 
-        private String createRestaurant() {
-            return "\nName: " + name.getText() + "\nType: " + type.getText() + "\nLocation: "
-                    + location.getText() + "\nVisited?: Not yet!";
+            playSound("button1.wav");
         }
 
         @Override
@@ -179,7 +271,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             }
         }
 
-
+        // a helper method for insertUpdate function
         private void enableButton() {
             if (!alreadyEnabled) {
                 button.setEnabled(true);
@@ -196,18 +288,48 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
     }
 
-    //This method is required by ListSelectionListener.
-    public void valueChanged(ListSelectionEvent e) {
-        if (e.getValueIsAdjusting() == false) {
+    // loads restaurant list from file
+    class LoadListener implements ActionListener {
 
-            if (list.getSelectedIndex() == -1) {
-                //No selection, disable fire button.
-                removeButton.setEnabled(false);
-
-            } else {
-                //Selection, enable the fire button.
-                removeButton.setEnabled(true);
+        // EFFECTS: once the button is pressed, loads restaurant list from file
+        public void actionPerformed(ActionEvent e) {
+            try {
+                restaurantList = jsonReader.read();
+                JOptionPane.showMessageDialog(frame, "Data has been loaded");
+            } catch (IOException io) {
+                System.out.println("Unable to read from file: " + JSON_STORE);
             }
+            playSound("button2.wav");
         }
     }
+
+    // saves restaurant list to file
+    class SaveListener implements ActionListener {
+
+        // EFFECTS: once the button is pressed, loads restaurant list from file
+        public void actionPerformed(ActionEvent e) {
+            try {
+                jsonWriter.open();
+                jsonWriter.write(restaurantList);
+                jsonWriter.close();
+                JOptionPane.showMessageDialog(frame, "Data has been saved");
+            } catch (IOException io) {
+                System.out.println("Unable to save from file: " + JSON_STORE);
+            }
+            playSound("button3.wav");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: allows the sound to be played
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+        }
+    }
+
 }
