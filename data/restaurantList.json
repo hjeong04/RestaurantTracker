@@ -1,0 +1,19 @@
+{
+    "name": "RestaurantList",
+    "restaurants": [
+        {
+            "visited?": false,
+            "name": "Bufala",
+            "rating": 0,
+            "location": "Kerrisdale",
+            "type": "Pizza"
+        },
+        {
+            "visited?": false,
+            "name": "McDonalds",
+            "rating": 0,
+            "location": "Kerrisdale",
+            "type": "Fast Food"
+        }
+    ]
+}
