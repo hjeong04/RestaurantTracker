@@ -132,7 +132,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         add(buttonPane, BorderLayout.PAGE_END);
     }
 
-    // a helper method for construct panel
+    // MODIFIES: this
+    // EFFECTS: constructs the left component of the button pane with remove, load, save buttons
     private JPanel constructLeftButtonPane() {
         JPanel leftButtonPane = new JPanel();
         leftButtonPane.setLayout(new BoxLayout(leftButtonPane, BoxLayout.PAGE_AXIS));
@@ -142,7 +143,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         return leftButtonPane;
     }
 
-    // a helper method for construct panel
+    // MODIFIES: this
+    // EFFECTS: constructs the part of the button pane with JTextFields
     private JPanel constructLabels() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -159,7 +161,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: determines what happens when objects in the list are selected
+    // EFFECTS: enables remove function and prints out the right component of split pane
+    //          when the selected value changes
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {
 
@@ -176,6 +179,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: prints out the necessary information that correspond to the name of the restaurant
+    //          in the right component of the split pane
     private void updateInfo(String restaurantName) {
         if (restaurantList == null) {
             return;
@@ -188,10 +194,11 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
     }
 
-    // removes the restaurant from the list
+    // a listener for the remove button
     class RemoveListener implements ActionListener {
 
-        // EFFECTS: removes the selected element from the list and from the panel
+        // MODIFIES: this
+        // EFFECTS: removes the selected element from the list and from the panel and plays the button sound
         public void actionPerformed(ActionEvent e) {
             //This method can be called only if
             //there's a valid selection
@@ -215,10 +222,13 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
 
             }
             playSound("data" + File.separator + "button.wav");
+            if (index == -1) {
+                splitpane.setRightComponent(new JTextArea(""));
+            }
         }
     }
 
-    //This listener is shared by the text field and the add button.
+    // a listener for the add button
     class AddListener implements ActionListener, DocumentListener {
         private boolean alreadyEnabled = false;
         private JButton button;
@@ -227,7 +237,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             this.button = button;
         }
 
-        // EFFECTS: adds the element into the list
+        // MODIFIES: this
+        // EFFECTS: adds the elements into the restaurantlist, inserts element into the listmodel, clears the text
+        //          field, makes the new item visible and plays the button sound
         public void actionPerformed(ActionEvent e) {
             Restaurant restaurant = new Restaurant(name.getText(), type.getText(), location.getText());
             restaurantList.addRestaurant(restaurant);
@@ -253,7 +265,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             list.setSelectedIndex(index);
             list.ensureIndexIsVisible(index);
 
-            playSound("data" + File.separator + "button1.wav");
+            playSound("data" + File.separator + "button.wav");
+
         }
 
         @Override
@@ -274,6 +287,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
 
         // a helper method for insertUpdate function
+        // MODIFIES: this
+        // EFFECTS: enables the button
         private void enableButton() {
             if (!alreadyEnabled) {
                 button.setEnabled(true);
@@ -281,6 +296,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
 
         // a helper method for removeUpdate function
+        // MODIFIES: this
+        // EFFECTS: if text field is empty, enables button and return true
+        //          false otherwise
         private boolean handleEmptyTextField(DocumentEvent e) {
             if (e.getDocument().getLength() <= 0) {
                 button.setEnabled(false);
@@ -291,10 +309,11 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
     }
 
-    // loads restaurant list from file
+    // a listener for the load button
     class LoadListener implements ActionListener {
 
-        // EFFECTS: once the button is pressed, loads restaurant list from file
+        // MODIFIES: this
+        // EFFECTS: once the button is pressed, loads restaurant list from file and plays the button sound
         public void actionPerformed(ActionEvent e) {
             try {
                 restaurantList = jsonReader.read();
@@ -305,14 +324,15 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             } catch (IOException io) {
                 System.out.println("Unable to read from file: " + JSON_STORE);
             }
-            playSound("data" + File.separator + "button2.wav");
+            playSound("data" + File.separator + "button1.wav");
         }
     }
 
-    // saves restaurant list to file
+    // a listener for the save button
     class SaveListener implements ActionListener {
 
-        // EFFECTS: once the button is pressed, loads restaurant list from file
+        // MODIFIES: this
+        // EFFECTS: once the button is pressed, loads restaurant list from file and plays the button sound
         public void actionPerformed(ActionEvent e) {
             try {
                 jsonWriter.open();
@@ -322,7 +342,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             } catch (IOException io) {
                 System.out.println("Unable to save from file: " + JSON_STORE);
             }
-            playSound("data" + File.separator + "button3.wav");
+            playSound("data" + File.separator + "button1.wav");
         }
     }
 
@@ -332,10 +352,10 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
             Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
             clip.start();
         } catch (Exception ex) {
             System.out.println("Error with playing sound.");
-            ex.printStackTrace();
         }
     }
 
