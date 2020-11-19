@@ -40,7 +40,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private JTextField location;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private JSplitPane splitpane;
+    private JSplitPane splitPane;
 
     // EFFECTS: establishes the components of the GUI
     public RestaurantGUI(JFrame frame) {
@@ -55,7 +55,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         info = new JTextArea(10,20);
         JScrollPane infoScrollPane = new JScrollPane(info);
         info.setEditable(false);
-        splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, infoScrollPane);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane, infoScrollPane);
 
         initializeAddButton();
         removeButton = new JButton(removeString);
@@ -65,7 +65,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         saveButton = new JButton(saveString);
         initializeButtons(saveButton, saveString, new SaveListener());
         initializeJTextFields(addListener);
-        constructPanel(splitpane, addButton);
+        constructPanel(splitPane, addButton);
     }
 
     // MODIFIES: this
@@ -89,6 +89,8 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         addButton.setEnabled(false);
     }
 
+    // MODIFIES: button
+    // EFFECTS: initializes the buttons by setting action command and adding action listener
     private void initializeButtons(JButton button, String text, ActionListener actionListener) {
         button.setActionCommand(text);
         button.addActionListener(actionListener);
@@ -110,7 +112,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         location.getDocument().addDocumentListener(addListener);
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, spiltpane, addButton
     // EFFECTS: constructs panel and adds all the necessary components
     private void constructPanel(JSplitPane splitPane, JButton addButton) {
         JPanel buttonPane = new JPanel();
@@ -132,7 +134,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         add(buttonPane, BorderLayout.PAGE_END);
     }
 
-    // MODIFIES: this
     // EFFECTS: constructs the left component of the button pane with remove, load, save buttons
     private JPanel constructLeftButtonPane() {
         JPanel leftButtonPane = new JPanel();
@@ -143,7 +144,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         return leftButtonPane;
     }
 
-    // MODIFIES: this
     // EFFECTS: constructs the part of the button pane with JTextFields
     private JPanel constructLabels() {
         JPanel panel = new JPanel();
@@ -163,6 +163,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     // MODIFIES: this
     // EFFECTS: enables remove function and prints out the right component of split pane
     //          when the selected value changes
+    @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {
 
@@ -188,7 +189,7 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
         for (Restaurant r: restaurantList.viewRestaurantList()) {
             if (r.getName().equals(restaurantName)) {
-                splitpane.setRightComponent(new JTextArea("\nName: " +  r.getName() + "\nType: " + r.getType()
+                splitPane.setRightComponent(new JTextArea("\nName: " +  r.getName() + "\nType: " + r.getType()
                         + "\nLocation: " + r.getLocation() + "\nVisited?: Not yet!"));
             }
         }
@@ -206,25 +207,26 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
             int index = list.getSelectedIndex();
             listModel.remove(index);
 
+            Restaurant r = restaurantList.viewRestaurantList().get(index);
+            restaurantList.removeRestaurant(r);
+
+
             int size = listModel.getSize();
 
             if (size == 0) {
                 removeButton.setEnabled(false);
+                splitPane.setRightComponent(new JTextArea(""));
 
             } else { //Select an index.
                 if (index == listModel.getSize()) {
                     //removed item in last position
                     index--;
                 }
-
                 list.setSelectedIndex(index);
                 list.ensureIndexIsVisible(index);
 
             }
             playSound("data" + File.separator + "button.wav");
-            if (index == -1) {
-                splitpane.setRightComponent(new JTextArea(""));
-            }
         }
     }
 
@@ -270,16 +272,22 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
         }
 
         @Override
+        // MODIFIES: this
+        // EFFECTS: gives notification that there was an insert into the document.
         public void insertUpdate(DocumentEvent e) {
             enableButton();
         }
 
         @Override
+        // MODIFIES: this
+        // EFFECTS: Gives notification that a portion of the document has been removed
         public void removeUpdate(DocumentEvent e) {
             handleEmptyTextField(e);
         }
 
         @Override
+        // MODIFIES: this
+        // EFFECTS: gives notification that an attribute or set of attributes changed.
         public void changedUpdate(DocumentEvent e) {
             if (!handleEmptyTextField(e)) {
                 enableButton();
