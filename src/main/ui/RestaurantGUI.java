@@ -29,6 +29,9 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private static final String saveString = "Save";
 
     private RestaurantList restaurantList;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+
     private JButton addButton;
     private JButton removeButton;
     private JButton loadButton;
@@ -38,8 +41,6 @@ public class RestaurantGUI extends JPanel implements ListSelectionListener {
     private JTextField name;
     private JTextField type;
     private JTextField location;
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
     private JSplitPane splitPane;
 
     // EFFECTS: establishes the components of the GUI

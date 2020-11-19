@@ -24,3 +24,10 @@ only that, but it will also keep a record of restaurants visited with a rating t
 - As a user, I want to be able to select a restaurant with the given name, type or location and view its details 
 - As a user, I want to save my restaurant list to file.
 - As a user, I want to be able to load my restaurant list from file. 
+
+## Phase 4: Task 2
+For this task, I have included a type hierarchy in my code.
+- AddListener, RemoveListener, SaveListener and RemoveListener classes all implement ActionListener interface.
+- Each of these classes override actionPerformed method and implement it in different ways. 
+
+## Phase 4: Task 3
