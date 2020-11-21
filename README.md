@@ -31,3 +31,14 @@ For this task, I have included a type hierarchy in my code.
 - Each of these classes override actionPerformed method and implement it in different ways. 
 
 ## Phase 4: Task 3
+To improve the design on the project...
+- I would first reduce repetitive code found in the RestaurantGUI class. Since each Restaurant has a name, a type and 
+a location, there were several times when a code had to be implemented three times for each of the restaurant 
+information. I would reduce these repetitive codes by making helper methods. 
+- Also, I would increase cohesion of the RestaurantGUI class. Inside the class, there are RemoveListener, AddListener, 
+LoadListener and SaveListener classes. Since the four Listener classes utilize and alter much of the fields in 
+RestaurantGUI class, there needs to be a bi-directional association between the four Listener classes, and the 
+RestaurantGUI class. 
+- Lastly, I would increase the cohesion of the methods inside the RestaurantGUI class. Some methods seem to be 
+performing multiple roles at once so in adherence to the single responsibility principles, I would construct more 
+methods to make sure each method performs one single function.
