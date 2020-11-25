@@ -1,19 +1,10 @@
 {
     "name": "RestaurantList",
-    "restaurants": [
-        {
-            "visited?": false,
-            "name": "Csdfl;kj",
-            "rating": 0,
-            "location": "w3eoijflsk",
-            "type": "sdl;fkj;slkd"
-        },
-        {
-            "visited?": false,
-            "name": "w;oeisdj;lk",
-            "rating": 0,
-            "location": "wefdl;skj",
-            "type": "wsdvnxi"
-        }
-    ]
+    "restaurants": [{
+        "visited?": false,
+        "name": "asldkj",
+        "rating": 0,
+        "location": "wefdoislvj",
+        "type": "osidvl"
+    }]
 }
