@@ -35,10 +35,11 @@ To improve the design on the project...
 - I would first reduce repetitive code found in the RestaurantGUI class. Since each Restaurant has a name, a type and 
 a location, there were several times when a code had to be implemented three times for each of the restaurant 
 information. I would reduce these repetitive codes by making helper methods. 
-- Also, I would increase cohesion of the RestaurantGUI class. Inside the class, there are RemoveListener, AddListener, 
-LoadListener and SaveListener classes. Since the four Listener classes utilize and alter much of the fields in 
-RestaurantGUI class, there needs to be a bi-directional association between the four Listener classes, and the 
-RestaurantGUI class. 
-- Lastly, I would increase the cohesion of the methods inside the RestaurantGUI class. Some methods seem to be 
+- Also, I would increase cohesion of the RestaurantGUI class. Inside the class, there are private classes called
+RemoveListener, AddListener, LoadListener and SaveListener classes. Since more of these private classes would 
+be required whenever a new function gets added, I think it better to sort them into a separate class. As these
+Listener classes utilize and alter much of the fields in RestaurantGUI class, there needs to be a bi-directional 
+association between the Listener class, and the RestaurantGUI class.
+- Lastly, I would increase the cohesion of the methods inside the RestaurantGUI class. Some methods are 
 performing multiple roles at once so in adherence to the single responsibility principles, I would construct more 
 methods to make sure each method performs one single function.
